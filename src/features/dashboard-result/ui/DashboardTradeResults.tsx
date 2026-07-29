@@ -115,10 +115,10 @@ export function DashboardTradeResults({
   return (
     <section className="grid gap-4">
       <div className="flex gap-3 items-center justify-between">
-        <h2 className="text-lg font-semibold leading-7 text-foreground">
+        <h2 className="flex-1 whitespace-nowrap text-lg font-semibold leading-7 text-foreground">
           {transactionTypeLabel[transactionType]} 거래 요약
         </h2>
-        <div className="flex flex-wrap items-center gap-2">
+        <div className="flex flex-wrap items-center justify-end gap-2">
           <Badge variant="default" className="bg-muted text-muted-foreground">
             {formatSelectedDealYearMonth(summary)}
           </Badge>
