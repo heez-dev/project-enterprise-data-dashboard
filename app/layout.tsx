@@ -1,6 +1,5 @@
 import type { Metadata } from 'next';
 import { Geist, Geist_Mono } from 'next/font/google';
-import Script from 'next/script';
 import { AppShell } from '@/src/shared/components/layout/AppShell';
 import { themeInitializationScript } from '@/src/shared/constants/theme';
 import { AppProviders } from '@/src/shared/providers/app-providers';
@@ -38,12 +37,13 @@ export default function RootLayout({
       className={`${geistSans.variable} ${geistMono.variable} h-full antialiased`}
       suppressHydrationWarning
     >
-      <body className="flex min-h-full flex-col">
-        <Script
+      <head>
+        <script
           id="theme-initialization"
-          strategy="beforeInteractive"
           dangerouslySetInnerHTML={{ __html: themeInitializationScript }}
         />
+      </head>
+      <body className="flex min-h-full flex-col">
         <AppProviders>
           <AppShell>{children}</AppShell>
         </AppProviders>
