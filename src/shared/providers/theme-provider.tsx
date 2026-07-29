@@ -1,54 +1,65 @@
-"use client";
+'use client';
 
-import { type ReactNode, useEffect } from "react";
+import { type ReactNode, useEffect } from 'react';
+import { THEME_STORAGE_KEY } from '@/src/shared/constants/theme';
 import {
   type ThemeMode,
   useUiPreferencesStore,
-} from "@/src/shared/stores/use-ui-preferences-store";
-
-const THEME_STORAGE_KEY = "apartment-dashboard-theme";
+} from '@/src/shared/stores/use-ui-preferences-store';
 
 type ThemeProviderProps = {
   children: ReactNode;
 };
 
 export function ThemeProvider({ children }: ThemeProviderProps) {
-  const themeMode = useUiPreferencesStore((state) => state.themeMode);
   const setThemeMode = useUiPreferencesStore((state) => state.setThemeMode);
 
   useEffect(() => {
     const savedTheme = window.localStorage.getItem(THEME_STORAGE_KEY);
+    const initialThemeMode = isThemeMode(savedTheme) ? savedTheme : 'system';
+    const mediaQuery = window.matchMedia('(prefers-color-scheme: dark)');
 
-    if (isThemeMode(savedTheme)) {
-      setThemeMode(savedTheme);
-    }
-  }, [setThemeMode]);
-
-  useEffect(() => {
-    const mediaQuery = window.matchMedia("(prefers-color-scheme: dark)");
-
-    function applyTheme() {
+    function applyTheme(themeMode: ThemeMode) {
       const shouldUseDark =
-        themeMode === "dark" ||
-        (themeMode === "system" && mediaQuery.matches);
+        themeMode === 'dark' ||
+        (themeMode === 'system' && mediaQuery.matches);
 
-      document.documentElement.classList.toggle("dark", shouldUseDark);
+      document.documentElement.classList.toggle('dark', shouldUseDark);
     }
 
-    applyTheme();
-    window.localStorage.setItem(THEME_STORAGE_KEY, themeMode);
+    applyTheme(initialThemeMode);
+    window.localStorage.setItem(THEME_STORAGE_KEY, initialThemeMode);
+    setThemeMode(initialThemeMode);
 
-    mediaQuery.addEventListener("change", applyTheme);
+    const unsubscribe = useUiPreferencesStore.subscribe(
+      (state, previousState) => {
+        if (state.themeMode === previousState.themeMode) {
+          return;
+        }
+
+        applyTheme(state.themeMode);
+        window.localStorage.setItem(THEME_STORAGE_KEY, state.themeMode);
+      },
+    );
+    const handleSystemThemeChange = () => {
+      const currentThemeMode = useUiPreferencesStore.getState().themeMode;
+
+      if (currentThemeMode === 'system') {
+        applyTheme(currentThemeMode);
+      }
+    };
+
+    mediaQuery.addEventListener('change', handleSystemThemeChange);
 
     return () => {
-      mediaQuery.removeEventListener("change", applyTheme);
+      unsubscribe();
+      mediaQuery.removeEventListener('change', handleSystemThemeChange);
     };
-  }, [themeMode]);
+  }, [setThemeMode]);
 
   return children;
 }
 
 function isThemeMode(value: string | null): value is ThemeMode {
-  return value === "system" || value === "light" || value === "dark";
+  return value === 'system' || value === 'light' || value === 'dark';
 }
-
