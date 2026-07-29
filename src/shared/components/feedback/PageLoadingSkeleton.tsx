@@ -34,12 +34,12 @@ export function PageLoadingSkeleton({ page }: PageLoadingSkeletonProps) {
         </span>
       </header>
 
-      <section className="rounded-lg border border-border bg-card p-4 shadow-sm">
-        <div className="flex gap-2">
-          <SkeletonBlock className="h-8 w-20" />
-          <SkeletonBlock className="h-8 w-20" />
-          <SkeletonBlock className="h-8 w-20" />
-          <SkeletonBlock className="h-8 w-20" />
+      <section className="min-w-0 rounded-lg border border-border bg-card p-3 shadow-sm sm:p-4">
+        <div className="grid grid-cols-4 gap-2">
+          <SkeletonBlock className="h-8 min-w-0" />
+          <SkeletonBlock className="h-8 min-w-0" />
+          <SkeletonBlock className="h-8 min-w-0" />
+          <SkeletonBlock className="h-8 min-w-0" />
         </div>
         <div className="mt-3 grid gap-3 sm:grid-cols-2 lg:grid-cols-[repeat(4,minmax(0,1fr))_5rem]">
           {Array.from({ length: 4 }).map((_, index) => (
@@ -70,10 +70,10 @@ export function PageLoadingSkeleton({ page }: PageLoadingSkeletonProps) {
 
 function DashboardResultSkeleton() {
   return (
-    <section className="grid gap-4">
-      <div className="flex items-center justify-between gap-4">
+    <section className="grid min-w-0 gap-4">
+      <div className="flex min-w-0 flex-col items-start gap-3 sm:flex-row sm:items-center sm:justify-between sm:gap-4">
         <SkeletonBlock className="h-7 w-36" />
-        <div className="flex gap-2">
+        <div className="flex max-w-full gap-2">
           <SkeletonBlock className="h-6 w-20 rounded-full" />
           <SkeletonBlock className="h-6 w-24 rounded-full" />
         </div>
@@ -90,7 +90,7 @@ function DashboardResultSkeleton() {
         ))}
       </div>
       <div className="grid gap-4 lg:grid-cols-[1fr_1.4fr]">
-        <div className="h-72 rounded-lg border border-border bg-card p-4 shadow-sm">
+        <div className="min-w-0 h-72 rounded-lg border border-border bg-card p-4 shadow-sm">
           <SkeletonBlock className="h-5 w-32" />
           <div className="mt-6 grid gap-5">
             {['w-full', 'w-11/12', 'w-4/5', 'w-3/4', 'w-2/3'].map((width) => (
@@ -109,7 +109,7 @@ function DashboardResultSkeleton() {
 
 function TableSkeleton() {
   return (
-    <section className="overflow-hidden rounded-lg border border-border bg-card shadow-sm">
+    <section className="min-w-0 overflow-hidden rounded-lg border border-border bg-card shadow-sm">
       <div className="flex items-center justify-between border-b border-border p-4">
         <SkeletonBlock className="h-5 w-32" />
         <SkeletonBlock className="h-5 w-20" />
